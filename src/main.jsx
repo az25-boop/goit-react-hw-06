@@ -6,8 +6,8 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provaider>
-      <App />
-    </Provaider>
+    {/* <Provaider> */}
+    <App />
+    {/* </Provaider> */}
   </React.StrictMode>
 );
