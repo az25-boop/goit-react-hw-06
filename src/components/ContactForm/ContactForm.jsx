@@ -1,41 +1,73 @@
-import { useId } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import s from "./ContactForm.module.css";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addContact, selectContacts } from "../../redux/contactsSlice";
+import css from "./ContactForm.module.css";
 
-export default function ContactForm({ onSubmit }) {
-  const nameId = useId();
-  const numberId = useId();
 
-  const formSchema = Yup.object().shape({
-    name: Yup.string()
-      .min(3, "Too short! 💖")
-      .max(50, "Too long! 😍")
-      .required("Required ✔"),
-    number: Yup.string()
-      .min(3, "Too short! 😜")
-      .max(50, "Too long! 😎")
-      .required("Required ✔"),
-  });
+export default function ContactForm() {
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+  const contacts = useSelector(selectContacts);
+  const dispatch = useDispatch();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const normalizedNewName = name.toLowerCase();
+    const normalizedNewNumber = number.toLowerCase();
+
+    const hasDuplicates = contacts.some(
+      (contact) =>
+        (typeof contact.name === "string" &&
+          contact.name.toLowerCase() === normalizedNewName) ||
+        (typeof contact.number === "string" &&
+          contact.number.toLowerCase() === normalizedNewNumber)
+    );
+
+    if (hasDuplicates) {
+      alert("This contact already exists!");
+      return;
+    }
+
+    dispatch(addContact({ name, number }));
+    setName("");
+    setNumber("");
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "name") setName(value);
+    if (name === "number") setNumber(value);
+  };
 
   return (
-    <div>
-      <h1>Contact Us</h1>
-      <Formik
-        initialValues={{ name: "", number: "" }}
-        onSubmit={onSubmit}
-        validationSchema={formSchema}
-      >
-        <Form className={s.form}>
-          <label htmlFor={nameId}>Name</label>
-          <Field type="text" name="name" id={nameId} />
-          <ErrorMessage className={s.error} name="name" component="span" />
-          <label htmlFor={numberId}>Number</label>
-          <Field type="tel" name="number" id={numberId} />
-          <ErrorMessage className={s.error} name="number" component="span" />
-          <button type="submit">Add contact</button>
-        </Form>
-      </Formik>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <label>
+        <p>Name</p>
+        <input
+          type="text"
+          name="name"
+          required
+          pattern="[a-zA-Zа-яА-ЯіІїЇґҐєЄ']+"
+          value={name}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        <p>Number</p>
+        <input
+          type="tel"
+          name="number"
+          required
+          pattern="^\+?\d{1,4}[ .\-]?\(?\d{1,3}\)?[ .\-]?\d{1,4}[ .\-]?\d{1,9}$"
+          title="Format: XXX-XXX-XX-XX"
+          value={number}
+          onChange={handleChange}
+        />
+      </label>
+      <button className={css.submitBtn} type="submit">
+        Add contact
+      </button>
+    </form>
   );
 }

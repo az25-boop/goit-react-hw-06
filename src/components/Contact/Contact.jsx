@@ -1,19 +1,34 @@
-import { IoIosContact } from "react-icons/io";
-import { FaPhoneAlt } from "react-icons/fa";
-import s from "./Contact.module.css";
+import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { deleteContact } from "../../redux/contactsSlice";
+import css from "./Contact.module.css";
+export default function Contact({ contact }) {
+  const { name, number, id } = contact;
+  const dispatch = useDispatch();
 
-export default function Contact({ data, onDelete }) {
+  const handleDeleteContact = () => {
+    dispatch(deleteContact(id));
+  };
+
   return (
-    <div className={s.contact}>
-      <div>
-        <p>
-          <IoIosContact className={s.icon} /> {data.name}
-        </p>
-        <p>
-          <FaPhoneAlt className={s.icon} /> {data.number}
-        </p>
-      </div>
-      <button onClick={() => onDelete(data.id)}>Delete</button>
-    </div>
+    <li className={css.contactItem}>
+      <span>{name}:</span>
+      <span> {number}</span>
+      <button
+        className={css.deleteBtn}
+        type="button"
+        onClick={handleDeleteContact}
+      >
+        Delete
+      </button>
+    </li>
   );
 }
+
+Contact.propTypes = {
+  contact: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+  }).isRequired,
+};

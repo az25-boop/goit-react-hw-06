@@ -1,13 +1,10 @@
-.form {
-  border: 1px black solid;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  border-radius: 6px;
-}
 
-.error {
-  color: red;
-  font-size: 14px;
+.submitBtn{
+  display: flex;
+  margin-top: 10px;
+  color: white;
+  background-color: rgb(108, 108, 219);
+  border: 1px;
+  border-radius: 4px;
+  padding: 7px;
 }
