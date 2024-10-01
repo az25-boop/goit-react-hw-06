@@ -1,11 +1,10 @@
-
 .contactItem {
   margin-bottom: 10px;
 }
-.deleteBtn{
+.deleteBtn {
   margin-left: 10px;
-  color: #ffffff;
-  background-color: #db48cd;
+  color: #0c0c0c;
+  background-color: #797678;
   border: 1px;
   border-radius: 4px;
   padding: 7px;
