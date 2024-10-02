@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { addContact, selectContacts } from "../../redux/contactsSlice";
 import css from "./ContactForm.module.css";
 
-
 export default function ContactForm() {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
@@ -41,7 +40,7 @@ export default function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={css.form} onSubmit={handleSubmit}>
       <label>
         <p>Name</p>
         <input
